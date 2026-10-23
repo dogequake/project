@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${title})}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <div class="card">
+        <h1 th:text="${title}">Площадка</h1>
+        <form class="stack" th:action="${action}" th:object="${locationForm}" method="post">
+            <label>Название
+                <input type="text" th:field="*{name}">
+                <span class="err" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            </label>
+            <label>Город
+                <input type="text" th:field="*{city}">
+                <span class="err" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+            </label>
+            <label>Адрес
+                <input type="text" th:field="*{address}">
+                <span class="err" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </label>
+            <label>Цена электроэнергии, руб. за кВт·ч
+                <input type="number" min="0" step="0.0001" th:field="*{electricityPricePerKwh}">
+                <span class="err" th:if="${#fields.hasErrors('electricityPricePerKwh')}" th:errors="*{electricityPricePerKwh}"></span>
+            </label>
+            <label>PUE (коэффициент энергоэффективности, от 1.0)
+                <input type="number" min="1" step="0.01" th:field="*{pue}">
+                <span class="err" th:if="${#fields.hasErrors('pue')}" th:errors="*{pue}"></span>
+            </label>
+            <label>Аренда 1U стойки, руб. в месяц
+                <input type="number" min="0" step="0.01" th:field="*{rackUnitRentPerMonth}">
+                <span class="err" th:if="${#fields.hasErrors('rackUnitRentPerMonth')}" th:errors="*{rackUnitRentPerMonth}"></span>
+            </label>
+            <button class="btn" type="submit">Сохранить</button>
+            <a class="btn secondary" th:href="@{/locations}">Отмена</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

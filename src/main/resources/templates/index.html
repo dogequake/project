@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Главная')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <h1>Учёт серверной инфраструктуры</h1>
+    <p>Здравствуйте, <b sec:authentication="name">user</b>!</p>
+    <div class="grid">
+        <a class="tile" th:href="@{/servers}">
+            <h3>Серверы</h3>
+            <span class="muted">Список серверов, добавление, изменение, удаление</span>
+        </a>
+        <a class="tile" th:href="@{/locations}">
+            <h3>Площадки / ЦОД</h3>
+            <span class="muted">Дата-центры: стоимость электричества, PUE, аренда стойки</span>
+        </a>
+        <a class="tile" th:href="@{/calculator}">
+            <h3>Расчёт стоимости</h3>
+            <span class="muted">Годовая стоимость содержания сервера</span>
+        </a>
+        <a class="tile" th:href="@{/about}">
+            <h3>О приложении</h3>
+            <span class="muted">Информация о разработчике и приложении</span>
+        </a>
+        <a class="tile" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/roles}">
+            <h3>Управление ролями</h3>
+            <span class="muted">Назначение ролей пользователям (только ADMIN)</span>
+        </a>
+    </div>
+</div>
+</body>
+</html>

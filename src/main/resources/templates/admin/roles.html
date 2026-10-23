@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Роли')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <h1>Управление ролями</h1>
+    <div th:replace="~{fragments :: messages}"></div>
+    <p class="muted">Свою собственную роль изменить нельзя. Пользователь увидит новую роль после повторного входа.</p>
+    <table>
+        <thead>
+        <tr><th>ID</th><th>Логин</th><th>Текущая роль</th><th>Назначить роль</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}">1</td>
+            <td th:text="${u.username}">admin</td>
+            <td><span class="badge" th:text="${u.role}">ADMIN</span></td>
+            <td>
+                <form class="inline" th:action="@{/admin/roles}" method="post">
+                    <input type="hidden" name="username" th:value="${u.username}">
+                    <select name="role">
+                        <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"
+                                th:selected="${r == u.role}">USER</option>
+                    </select>
+                    <button class="btn small" type="submit"
+                            th:disabled="${u.username == #authentication.name}">Сохранить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

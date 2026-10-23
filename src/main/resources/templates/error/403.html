@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Доступ запрещён')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <div class="card">
+        <h1>403 - Доступ запрещён</h1>
+        <p>У вашей роли нет прав на это действие или запись принадлежит другому пользователю.</p>
+        <a class="btn" th:href="@{/}">На главную</a>
+    </div>
+</div>
+</body>
+</html>

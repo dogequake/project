@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Не найдено')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <div class="card">
+        <h1>404 - Страница или запись не найдена</h1>
+        <a class="btn" th:href="@{/}">На главную</a>
+    </div>
+</div>
+</body>
+</html>

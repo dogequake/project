@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${title})}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <div class="card">
+        <h1 th:text="${title}">Сервер</h1>
+        <div class="alert error" th:if="${#lists.isEmpty(locations)}">
+            Сначала создайте площадку: серверу нужно выбрать площадку.
+            <a th:href="@{/locations/new}">Добавить площадку</a>
+        </div>
+        <form class="stack" th:action="${action}" th:object="${serverForm}" method="post">
+            <label>Название
+                <input type="text" th:field="*{name}">
+                <span class="err" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            </label>
+            <label>IP-адрес
+                <input type="text" th:field="*{ipAddress}">
+                <span class="err" th:if="${#fields.hasErrors('ipAddress')}" th:errors="*{ipAddress}"></span>
+            </label>
+            <label>Ядер CPU
+                <input type="number" min="1" th:field="*{cpuCores}">
+                <span class="err" th:if="${#fields.hasErrors('cpuCores')}" th:errors="*{cpuCores}"></span>
+            </label>
+            <label>ОЗУ, ГБ
+                <input type="number" min="1" th:field="*{ramGb}">
+                <span class="err" th:if="${#fields.hasErrors('ramGb')}" th:errors="*{ramGb}"></span>
+            </label>
+            <label>Диск, ГБ
+                <input type="number" min="1" th:field="*{storageGb}">
+                <span class="err" th:if="${#fields.hasErrors('storageGb')}" th:errors="*{storageGb}"></span>
+            </label>
+            <label>Потребляемая мощность, Вт
+                <input type="number" min="1" th:field="*{powerWatts}">
+                <span class="err" th:if="${#fields.hasErrors('powerWatts')}" th:errors="*{powerWatts}"></span>
+            </label>
+            <label>Занимает юнитов в стойке (U)
+                <input type="number" min="1" th:field="*{rackUnits}">
+                <span class="err" th:if="${#fields.hasErrors('rackUnits')}" th:errors="*{rackUnits}"></span>
+            </label>
+            <label>Стоимость покупки, руб.
+                <input type="number" min="0" step="0.01" th:field="*{purchasePrice}">
+                <span class="err" th:if="${#fields.hasErrors('purchasePrice')}" th:errors="*{purchasePrice}"></span>
+            </label>
+            <label>Срок амортизации, лет
+                <input type="number" min="1" th:field="*{amortizationYears}">
+                <span class="err" th:if="${#fields.hasErrors('amortizationYears')}" th:errors="*{amortizationYears}"></span>
+            </label>
+            <label>Лицензии и поддержка, руб. в год
+                <input type="number" min="0" step="0.01" th:field="*{licenseCostPerYear}">
+                <span class="err" th:if="${#fields.hasErrors('licenseCostPerYear')}" th:errors="*{licenseCostPerYear}"></span>
+            </label>
+            <label>Площадка / ЦОД
+                <select th:field="*{locationId}">
+                    <option value="">- выберите -</option>
+                    <option th:each="l : ${locations}" th:value="${l.id}"
+                            th:text="${l.name + ' (' + l.city + ')'}">ЦОД</option>
+                </select>
+                <span class="err" th:if="${#fields.hasErrors('locationId')}" th:errors="*{locationId}"></span>
+            </label>
+            <button class="btn" type="submit">Сохранить</button>
+            <a class="btn secondary" th:href="@{/servers}">Отмена</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

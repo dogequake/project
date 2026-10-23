@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Расчёт стоимости')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <h1>Расчёт годовой стоимости содержания сервера</h1>
+
+    <div class="card">
+        <form class="stack" method="get" th:action="@{/calculator}">
+            <label>Сервер
+                <select name="serverId" required>
+                    <option value="">- выберите сервер -</option>
+                    <option th:each="s : ${servers}" th:value="${s.id}"
+                            th:text="${s.name + ' (' + s.location.name + ')'}"
+                            th:selected="${s.id == selectedId}">web-01</option>
+                </select>
+            </label>
+            <label>Горизонт расчёта, лет
+                <input type="number" name="years" min="1" max="50" th:value="${years}">
+            </label>
+            <button class="btn" type="submit">Рассчитать</button>
+        </form>
+        <p class="muted">Годовая стоимость = амортизация + электроэнергия (кВт × 8760 ч × PUE × цена кВт·ч)
+            + аренда стойки (юниты × цена 1U × 12) + лицензии.</p>
+    </div>
+
+    <div class="card" th:if="${result != null}">
+        <h2>Результат: <span th:text="${result.serverName}">web-01</span>
+            <span class="muted" th:text="'(' + ${result.locationName} + ')'"></span></h2>
+        <table>
+            <tr><td>Амортизация оборудования</td>
+                <td class="num" th:text="${#numbers.formatDecimal(result.amortization, 1, 'WHITESPACE', 2, 'COMMA')} + ' руб.'"></td></tr>
+            <tr><td>Электроэнергия (с учётом PUE)</td>
+                <td class="num" th:text="${#numbers.formatDecimal(result.electricity, 1, 'WHITESPACE', 2, 'COMMA')} + ' руб.'"></td></tr>
+            <tr><td>Аренда места в стойке</td>
+                <td class="num" th:text="${#numbers.formatDecimal(result.rent, 1, 'WHITESPACE', 2, 'COMMA')} + ' руб.'"></td></tr>
+            <tr><td>Лицензии и поддержка</td>
+                <td class="num" th:text="${#numbers.formatDecimal(result.licenses, 1, 'WHITESPACE', 2, 'COMMA')} + ' руб.'"></td></tr>
+            <tr class="total"><td>Итого за год</td>
+                <td class="num" th:text="${#numbers.formatDecimal(result.total, 1, 'WHITESPACE', 2, 'COMMA')} + ' руб.'"></td></tr>
+            <tr class="total"><td th:text="'Итого за ' + ${years} + ' лет'">Итого за N лет</td>
+                <td class="num" th:text="${#numbers.formatDecimal(resultForYears, 1, 'WHITESPACE', 2, 'COMMA')} + ' руб.'"></td></tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Годовая стоимость всех доступных серверов</h2>
+        <div class="table-wrap">
+        <table>
+            <thead>
+            <tr><th>Сервер</th><th>Площадка</th><th class="num">Амортизация</th><th class="num">Электричество</th>
+                <th class="num">Аренда</th><th class="num">Лицензии</th><th class="num">Итого в год</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${all}">
+                <td th:text="${c.serverName}">web-01</td>
+                <td th:text="${c.locationName}">ЦОД</td>
+                <td class="num" th:text="${#numbers.formatDecimal(c.amortization, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+                <td class="num" th:text="${#numbers.formatDecimal(c.electricity, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+                <td class="num" th:text="${#numbers.formatDecimal(c.rent, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+                <td class="num" th:text="${#numbers.formatDecimal(c.licenses, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+                <td class="num" th:text="${#numbers.formatDecimal(c.total, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(all)}"><td colspan="7" class="muted">Серверов нет</td></tr>
+            <tr class="total" th:if="${!#lists.isEmpty(all)}">
+                <td colspan="6">Всего за год, руб.</td>
+                <td class="num" th:text="${#numbers.formatDecimal(grandTotal, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

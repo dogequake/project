@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Серверы')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <h1>Серверы</h1>
+    <div th:replace="~{fragments :: messages}"></div>
+    <p th:if="${@access.canCreate(#authentication)}">
+        <a class="btn" th:href="@{/servers/new}">+ Добавить сервер</a>
+    </p>
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th><th>Название</th><th>IP</th><th class="num">CPU</th><th class="num">RAM, ГБ</th>
+            <th class="num">Диск, ГБ</th><th class="num">Мощность, Вт</th><th class="num">Юнитов</th>
+            <th>Площадка</th><th>Владелец</th><th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${servers}">
+            <td th:text="${s.id}">1</td>
+            <td th:text="${s.name}">web-01</td>
+            <td th:text="${s.ipAddress}">10.0.0.1</td>
+            <td class="num" th:text="${s.cpuCores}">16</td>
+            <td class="num" th:text="${s.ramGb}">64</td>
+            <td class="num" th:text="${s.storageGb}">1000</td>
+            <td class="num" th:text="${s.powerWatts}">350</td>
+            <td class="num" th:text="${s.rackUnits}">1</td>
+            <td th:text="${s.location.name}">ЦОД</td>
+            <td><span class="badge" th:text="${s.createdBy}">admin</span></td>
+            <td>
+                <th:block th:if="${@access.canModify(#authentication, s.createdBy)}">
+                    <a class="btn small" th:href="@{/servers/{id}/edit(id=${s.id})}">Изменить</a>
+                    <form class="inline" th:action="@{/servers/{id}/delete(id=${s.id})}" method="post"
+                          onsubmit="return confirm('Удалить сервер?');">
+                        <button class="btn small danger" type="submit">Удалить</button>
+                    </form>
+                </th:block>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(servers)}">
+            <td colspan="11" class="muted">Серверов пока нет</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</html>

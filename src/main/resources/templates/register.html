@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Регистрация')}"></head>
+<body>
+<div class="auth-box card">
+    <h1>Регистрация</h1>
+    <p class="muted">Новым пользователям назначается роль READ_ONLY. Повысить роль может администратор.</p>
+    <form class="stack" th:action="@{/register}" th:object="${registerForm}" method="post">
+        <label>Логин
+            <input type="text" th:field="*{username}">
+            <span class="err" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </label>
+        <label>Пароль
+            <input type="password" th:field="*{password}">
+            <span class="err" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </label>
+        <label>Повторите пароль
+            <input type="password" th:field="*{confirmPassword}">
+            <span class="err" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+        </label>
+        <button class="btn" type="submit">Зарегистрироваться</button>
+    </form>
+    <p class="muted"><a th:href="@{/login}">Назад ко входу</a></p>
+</div>
+</body>
+</html>

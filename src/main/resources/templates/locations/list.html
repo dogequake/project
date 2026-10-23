@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Площадки')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+    <h1>Площадки / ЦОД</h1>
+    <div th:replace="~{fragments :: messages}"></div>
+    <p th:if="${@access.canCreate(#authentication)}">
+        <a class="btn" th:href="@{/locations/new}">+ Добавить площадку</a>
+    </p>
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th><th>Название</th><th>Город</th><th>Адрес</th>
+            <th class="num">Цена кВт·ч, руб.</th><th class="num">PUE</th>
+            <th class="num">Аренда 1U, руб./мес.</th><th>Владелец</th><th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="l : ${locations}">
+            <td th:text="${l.id}">1</td>
+            <td th:text="${l.name}">ЦОД</td>
+            <td th:text="${l.city}">Город</td>
+            <td th:text="${l.address}">Адрес</td>
+            <td class="num" th:text="${l.electricityPricePerKwh}">5.80</td>
+            <td class="num" th:text="${l.pue}">1.45</td>
+            <td class="num" th:text="${l.rackUnitRentPerMonth}">1200</td>
+            <td><span class="badge" th:text="${l.createdBy}">admin</span></td>
+            <td>
+                <th:block th:if="${@access.canModify(#authentication, l.createdBy)}">
+                    <a class="btn small" th:href="@{/locations/{id}/edit(id=${l.id})}">Изменить</a>
+                    <form class="inline" th:action="@{/locations/{id}/delete(id=${l.id})}" method="post"
+                          onsubmit="return confirm('Удалить площадку?');">
+                        <button class="btn small danger" type="submit">Удалить</button>
+                    </form>
+                </th:block>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(locations)}">
+            <td colspan="9" class="muted">Площадок пока нет</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</html>

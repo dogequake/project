@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' - Учёт серверной инфраструктуры'">Заголовок</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar" th:fragment="navbar">
+    <span class="brand">Учёт серверов</span>
+    <a th:href="@{/}">Главная</a>
+    <a th:href="@{/servers}">Серверы</a>
+    <a th:href="@{/locations}">Площадки / ЦОД</a>
+    <a th:href="@{/calculator}">Расчёт стоимости</a>
+    <a th:href="@{/about}">О приложении</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/roles}">Роли</a>
+    <span class="spacer"></span>
+    <span class="who">
+        <span sec:authentication="name">user</span>
+        (<span sec:authorize="hasRole('ADMIN')">ADMIN</span><span sec:authorize="hasRole('USER')">USER</span><span sec:authorize="hasRole('READ_ONLY')">READ_ONLY</span>)
+    </span>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn secondary small">Выйти</button>
+    </form>
+</nav>
+<div th:fragment="messages">
+    <div class="alert ok" th:if="${message}" th:text="${message}"></div>
+    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+</div>
+</body>
+</html>
